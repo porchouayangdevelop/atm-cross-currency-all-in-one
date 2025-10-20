@@ -10,6 +10,7 @@ COPY package*.json pnpm-lock.yaml ./
 RUN pnpm i
 
 ENV NODE_ENV=development
+ENV PORT=55099
 ENV BASE_URL_SERVICE=http://0.0.0.0:55099
 
 RUN mkdir -p /app/wsdl-templates /app/wsdl
