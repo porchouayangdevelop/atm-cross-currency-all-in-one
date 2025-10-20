@@ -20,4 +20,4 @@ COPY .env. env.prod ./
 
 EXPOSE 55099
 
-CMD ["pnpm", "dev"]
+CMD ["node", "app/server.ts"]
