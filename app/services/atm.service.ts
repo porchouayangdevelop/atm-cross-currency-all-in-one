@@ -7,7 +7,6 @@ import {getValidateFailedMessage} from "../utils/mapping";
 import {SendMessageService} from "./sendMessage.service";
 import {NotificationService} from "./notification.service";
 import transferRepo from "../repo/transfer.repo";
-import {BackupRepo} from "../repo/backup.repo";
 
 
 const service = {

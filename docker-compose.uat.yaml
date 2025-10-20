@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  atm-cross-currency-uat-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=55099
+      - NODE_ENV=development
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+    networks:
+      - app-network-uat
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  nginx-atm-cross-currency-uat:
+    image: nginx:alpine
+    ports:
+      - "8001:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/uat.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - atm-cross-currency-uat-node1
+    networks:
+      - app-network-uat
+    restart: unless-stopped
+
+networks:
+  app-network-uat:
+    driver: bridge
