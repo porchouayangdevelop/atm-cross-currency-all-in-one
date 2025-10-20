@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:tns="http://controller.apbservicecenter.apb.com/"
+  targetNamespace="http://controller.apbservicecenter.apb.com/"
+  elementFormDefault="qualified"
+  version="1.0">
+
+  <!-- Request Element -->
+  <xs:element name="getCimcusmByCif" type="tns:getCimcusmByCif"/>
+
+  <!-- Response Element -->
+  <xs:element name="getCimcusmByCifResponse" type="tns:getCimcusmByCifResponse"/>
+
+  <!-- Request Type Definition -->
+  <xs:complexType name="getCimcusmByCif">
+    <xs:annotation>
+      <xs:documentation>
+        Request to get customer information by CIF
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="cif" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Customer Identification Number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="type" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Customer Type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Response Type Definition -->
+  <xs:complexType name="getCimcusmByCifResponse">
+    <xs:annotation>
+      <xs:documentation>
+        Response containing customer information
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="return" type="tns:cimcusm" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>List of customer records</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Customer Information Type Definition -->
+  <xs:complexType name="cimcusm">
+    <xs:annotation>
+      <xs:documentation>
+        Customer Information Model
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- Account Information -->
+      <xs:element name="accountCurrencyCode" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Currency code for the account (e.g., LAK, USD, THB)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="accountName" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Name of the account</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="acct" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Account number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="acctType" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Type of account (Savings, Current, etc.)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Address Information -->
+      <xs:element name="address1" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Primary address line</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="address2" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Secondary address line</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Personal Information -->
+      <xs:element name="birthOfDate" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Date of birth (format: YYYY-MM-DD)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="customerGender" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Gender (M/F)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="customerIDType" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Type of identification document</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="customerName" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Full name of the customer</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="customerTitle" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Title (Mr., Mrs., Ms., etc.)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Branch Information -->
+      <xs:element name="branch" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Branch code</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="brn" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Branch number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Customer Identification -->
+      <xs:element name="cif" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Customer Identification Number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="countAcct" type="xs:int" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Number of accounts</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Contact Information -->
+      <xs:element name="email" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Email address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="faxNo" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Fax number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="handPhone" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Mobile phone number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="tellNo" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Primary telephone number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="tellNo2" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Secondary telephone number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <!-- Other Information -->
+      <xs:element name="nationalityCode" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Nationality code (ISO 3166-1)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="status" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Customer status (Active, Inactive, etc.)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

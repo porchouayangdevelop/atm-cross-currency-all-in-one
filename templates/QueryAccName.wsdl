@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="QueryAccNameService" targetNamespace="http://www.apb.com.la/"
+             xmlns:tns="http://www.apb.com.la/QueryAccName"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+    <schema targetNamespace="http://www.apb.com.la/" elementFormDefault="qualified">
+      <complexType>
+
+      </complexType>
+    </schema>
+  </wsdl:types>
+
+
+  <!-- message -->
+  <message name="QueryAccName">
+    <part name="ATMID" type="xsd:string"/>
+    <part name="AccNum" type="xsd:string"/>
+  </message>
+
+  <message name="QueryAccNameResponse">
+    <part name="QueryAccNameResult" type="xsd:string"/>
+  </message>
+
+  <!-- PortType -->
+  <portType name="QueryAccNameServicePortType">
+    <operation name="QueryAccName">
+      <input message="tns:QueryAccName"/>
+      <output message="tns:QueryAccNameResponse"/>
+    </operation>
+  </portType>
+
+  <!-- binding -->
+  <binding name="QueryAccNameServiceBinding" type="tns:QueryAccNameServicePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="QueryAccName">
+      <soap:operation soapAction="http://www.apb.com.la/QueryAccName" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+
+
+  <!-- Service -->
+  <service name="QueryAccNameService">
+    <port name="QueryAccNameServicePort" binding="tns:QueryAccNameServiceBinding">
+      <soap:address location="{BASE_URL_SERVICE}/QueryAccName?wsdl"/>
+    </port>
+  </service>
+
+</definitions>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="http://controller.apbservicecenter.apb.com/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  targetNamespace="http://controller.apbservicecenter.apb.com/"
+  name="CimcusmControllerService">
+
+  <types>
+    <xsd:schema  xmlns:tns="http://controller.apbservicecenter.apb.com/"  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://controller.apbservicecenter.apb.com/">
+      <xsd:element name="getCimcusmByCif" type="tns:getCimcusmByCif"/>
+      <xsd:element name="getCimcusmByCifResponse" type="tns:getCimcusmByCifResponse" xmlns:tns="http://controller.apbservicecenter.apb.com/"/>
+      <xsd:complexType name="getCimcusmByCif">
+        <xsd:sequence>
+          <xsd:element name="cif" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="type" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="getCimcusmByCifResponse">
+        <xsd:sequence>
+          <xsd:element name="return" type="tns:cimcusm" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="cimcusm">
+        <xsd:sequence>
+          <xsd:element name="accountCurrencyCode" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="accountName" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="acct" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="acctType" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="address1" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="address2" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="birthOfDate" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="branch" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="brn" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="cif" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="countAcct" type="xsd:int" minOccurs="0"/>
+          <xsd:element name="customerGender" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="customerIDType" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="customerName" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="customerTitle" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="email" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="faxNo" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="handPhone" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="nationalityCode" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="status" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="tellNo" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="tellNo2" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <!-- Message Definitions -->
+  <message name="getCimcusmByCif">
+    <part name="parameters" element="tns:getCimcusmByCif"/>
+  </message>
+
+  <message name="getCimcusmByCifResponse">
+    <part name="parameters" element="tns:getCimcusmByCifResponse"/>
+  </message>
+
+  <!-- Port Type Definition -->
+  <portType name="CimcusmControllerService">
+    <operation name="getCimcusmByCif">
+      <input
+        wsam:Action="http://controller.apbservicecenter.apb.com/CimcusmControllerService/getCimcusmByCifRequest"
+        message="tns:getCimcusmByCif"/>
+      <output
+        wsam:Action="http://controller.apbservicecenter.apb.com/CimcusmControllerService/getCimcusmByCifResponse"
+        message="tns:getCimcusmByCifResponse"/>
+    </operation>
+  </portType>
+
+  <!-- SOAP Binding -->
+  <binding name="CimcusmControllerServicePortBinding" type="tns:CimcusmControllerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="getCimcusmByCif">
+      <soap:operation
+        soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service Definition -->
+  <service name="CimcusmControllerService">
+    <port name="CimcusmControllerServicePort" binding="tns:CimcusmControllerServicePortBinding">
+      <soap:address location="${BASE_URL_SERVICE}/APBServiceCenter/CimcusmControllerService?wsdl"/>
+    </port>
+  </service>
+</definitions>

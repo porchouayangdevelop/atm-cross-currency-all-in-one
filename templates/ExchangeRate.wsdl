@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ExchangeRateService" targetNamespace="http://www.apb.com.la/"
+             xmlns:tns="http://www.apb.com.la/ExchangeRate"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+>
+
+  <types>
+    <schema targetNamespace="http://www.apb.com.la/">
+      <element name="ExchangeRate">
+        <complexType/>
+      </element>
+      <element name="ExchangeRateResponse">
+        <complexType>
+          <sequence>
+            <element minOccurs="0" maxOccurs="1" name="ExchangeRateResult" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+
+    </schema>
+  </types>
+
+
+  <!-- message -->
+  <message name="ExchangeRateSoapIn">
+    <part name="parameters" element="tns:ExchangeRate" />
+  </message>
+  <message name="ExchangeRateSoapOut">
+    <part name="parameters" element="tns:ExchangeRateResponse"/>
+  </message>
+
+  <!-- PortType -->
+  <portType name="ExchangeRateServicePortType">
+    <operation name="ExchangeRate">
+      <input message="tns:ExchangeRateSoapIn"/>
+      <output message="tns:ExchangeRateSoapOut"/>
+    </operation>
+  </portType>
+
+  <!-- binding -->
+  <binding name="ExchangeRateServiceBinding" type="tns:ExchangeRateServicePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ExchangeRate">
+      <soap:operation soapAction="http://www.apb.com.la/ExchangeRate" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+
+  <!-- Service -->
+  <service name="ExchangeRateService">
+    <port name="ExchangeRateServicePort" binding="tns:ExchangeRateServiceBinding">
+      <soap:address location="${BASE_URL_SERVICE}/ExchangeRateService?wsdl"/>
+    </port>
+  </service>
+
+</definitions>

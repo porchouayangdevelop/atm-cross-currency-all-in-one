@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://www.apb.com.la/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  name="SMS4ATM_UATSoap"
+                  targetNamespace="http://www.apb.com.la/">
+
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.apb.com.la/">
+      <s:element name="ExchangeRate">
+        <s:complexType/>
+      </s:element>
+      <s:element name="ExchangeRateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExchangeRateResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+
+  <wsdl:message name="ExchangeRateSoapIn">
+    <wsdl:part name="parameters" element="tns:ExchangeRate"/>
+  </wsdl:message>
+  <wsdl:message name="ExchangeRateSoapOut">
+    <wsdl:part name="parameters" element="tns:ExchangeRateResponse"/>
+  </wsdl:message>
+
+  <wsdl:portType name="SMS4ATM_UATSoap">
+    <wsdl:operation name="ExchangeRate">
+      <wsdl:input message="tns:ExchangeRateSoapIn"/>
+      <wsdl:output message="tns:ExchangeRateSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="SMS4ATM_UATSoap" type="tns:SMS4ATM_UATSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ExchangeRate">
+      <soap:operation soapAction="http://www.apb.com.la/ExchangeRate" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="SMS4ATM_UAT">
+    <wsdl:port name="SMS4ATM_UATSoap" binding="tns:SMS4ATM_UATSoap">
+      <soap:address location="http://10.2.6.142:55099/Service1.asmx?WSDL"/>
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>
