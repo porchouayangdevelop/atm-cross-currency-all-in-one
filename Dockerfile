@@ -1,30 +1,44 @@
 FROM node:18-alpine
+
+# Install system dependencies
 RUN apk add --no-cache gettext
 
 WORKDIR /app
 
+# Install pnpm globally
 RUN npm i -g pnpm@latest
 
-COPY package*.json pnpm-lock.yaml ./
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm i
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
+# Copy application files
+COPY app ./app
+COPY templates ./templates
+COPY tsconfig.json ./
+
+# Build TypeScript
+RUN pnpm build
+
+# Set environment variables (will be overridden by docker-compose)
 ENV NODE_ENV=development
 ENV PORT=55099
 ENV BASE_URL_SERVICE=http://0.0.0.0:55099
 
+# Create required directories
 RUN mkdir -p /app/wsdl-templates /app/wsdl
 
-COPY templates/SMS4ATM_UAT.wsdl /app/wsdl-templates/
+# Copy WSDL templates
+COPY templates/*.wsdl /app/wsdl-templates/
 
-
-
-#COPY .env. env.prod ./
-
+# Expose port
 EXPOSE 55099
 
-CMD ["npx", "tsx","app/server.ts"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:55099/Service?wsdl || exit 1
 
-#docker build --t api-cross-currency:v1.0.0 .
-#docker run -d --name api-cross-currency1 -p 55099:55099 api-cross-currency:v1.0.0
-
+# Start application
+CMD ["node", "dist/server.js"]

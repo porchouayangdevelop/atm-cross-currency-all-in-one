@@ -1,5 +1,4 @@
-import { PromisePool as CorePool } from "../configs/db.config";
-import ValidateError from "../utils/validateError";
+import {PromisePool as CorePool} from "../configs/db.config";
 
 const interestRateService = {
 	InterestRateService: {
