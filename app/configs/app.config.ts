@@ -56,7 +56,7 @@ if (result.error) {
 	console.error('Error while running app config with load environment available :', result.error);
 	throw result.error;
 } else {
-	console.log('Environment variable load successfully :', env);
+	console.log('Environment variable load successfully :', process.env.NODE_ENV, 'MODE');
 }
 
 const internalConfig = {

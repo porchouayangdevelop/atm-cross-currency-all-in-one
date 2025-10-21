@@ -95,7 +95,7 @@ const startServer = async () => {
 			// 	`QueryAccName available at http://localhost:${httpPort}/QueryAccName?wsdl`
 			// );
 			console.log(
-				`atm all in one available at http://localhost:${httpPort}/Service1.asmx?wsdl`
+				`atm all in one available at http://localhost:${httpPort}/Service?wsdl`
 			);
 			console.log(
 				`Cif available at http://localhost:${httpPort}/APBServiceCenter/CimcusmControllerService?wsdl`

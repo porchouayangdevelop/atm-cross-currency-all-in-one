@@ -9,7 +9,7 @@ WORKDIR /app
 RUN npm i -g pnpm@latest
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package*.json pnpm-lock.yaml ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -18,6 +18,7 @@ RUN pnpm install --frozen-lockfile
 COPY app ./app
 COPY templates ./templates
 COPY tsconfig.json ./
+COPY .env* ./
 
 # Build TypeScript
 RUN pnpm build

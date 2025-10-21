@@ -74,7 +74,7 @@ const startServer = async () => {
         const server = await initialServer();
         server.listen(httpPort, httpHost, () => {
             console.log(`server started on HTTP:${httpHost} PORT:${httpPort}`);
-            console.log(`atm all in one available at http://localhost:${httpPort}/Service1.asmx?wsdl`);
+            console.log(`atm all in one available at http://localhost:${httpPort}/Service?wsdl`);
             console.log(`Cif available at http://localhost:${httpPort}/APBServiceCenter/CimcusmControllerService?wsdl`);
         });
     }
