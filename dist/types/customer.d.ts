@@ -1,4 +1,4 @@
-export interface CustomerInfo {
+export interface Customer {
     ci_no: string;
     ci_branch: string;
     customer_title: string;
@@ -22,7 +22,7 @@ export interface CustomerInfo {
     email: string;
     fax_no: string;
 }
-export interface AccountInfo {
+export interface Accounts {
     acct: string;
     acct_branchcode: string;
     prod_code: string;
@@ -30,10 +30,6 @@ export interface AccountInfo {
     l_acname: string;
     e_acname: string;
     ccy: string;
-    ac_status: string;
-}
-export interface GetCimcusmByCif {
-    customer: CustomerInfo;
-    account: AccountInfo[];
+    ac_sts: string;
 }
 //# sourceMappingURL=customer.d.ts.map

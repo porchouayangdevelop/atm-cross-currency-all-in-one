@@ -1,61 +1,80 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppConfig = void 0;
-const process = __importStar(require("node:process"));
 const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)({
-    path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env'
+const path_1 = __importDefault(require("path"));
+const env = process.env.NODE_ENV === 'production' ? '.env.prod' : '.env';
+const result = (0, dotenv_1.config)({
+    path: path_1.default.resolve(process.cwd(), env),
 });
+if (result.error) {
+    console.error('Error while running app config with load environment available :', result.error);
+    throw result.error;
+}
+else {
+    console.log('Environment variable load successfully :', env);
+}
+const internalConfig = {
+    host: process.env.S_DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.S_DB_USER,
+    password: process.env.S_DB_PASS,
+};
 exports.AppConfig = {
     server: {
-        host: process.env.HOST,
-        port: Number(process.env.PORT)
+        httpHost: process.env.HOST,
+        httpPort: Number(process.env.PORT)
     },
     database: {
-        host: process.env.DB_HOST,
-        port: Number(process.env.DB_PORT),
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
+        internal: {
+            cardzoneLog: {
+                ...internalConfig,
+                database: process.env.S_DB_NAME,
+            },
+            upi_service: process.env.NODE_ENV === 'development' ? {
+                ...internalConfig,
+                database: process.env.S_UPI_NAME,
+            } : {
+                ...internalConfig,
+                database: process.env.S_UPI_NAME,
+            }
+        },
+        external: {
+            core: {
+                host: process.env.DB_HOST,
+                port: Number(process.env.DB_PORT),
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_NAME,
+            },
+            ods: {
+                host: process.env.ODS_DB_HOST,
+                port: Number(process.env.ODS_DB_PORT),
+                user: process.env.ODS_DB_USER,
+                password: process.env.ODS_DB_PASS,
+                database: process.env.ODS_DB_NAME,
+            }
+        }
     },
-    rabbitmq: {
+    queue: {
         host: process.env.RABBIT_HOST,
         port: Number(process.env.RABBIT_PORT),
         user: process.env.RABBIT_USER,
         password: process.env.RABBIT_PASSWORD,
+    },
+    externalApi: process.env.ATM_CLIENT_URL,
+    slackConfig: {
+        token: process.env.SLACK_TOKEN,
+        id: process.env.SLACK_ID,
+        clientId: process.env.SLACK_CLIENT_ID,
+        clientSecret: process.env.SLACK_CLIENT_SECRET,
+        signingSecret: process.env.SLACL_SIGING_SECRET,
+        verifyToken: process.env.SLACK_VERIFY_TOKEN,
+        bothAuthToken: process.env.SLACK_BOT_AUTH_TOKEN,
+        webhookUrl: process.env.ATM_CROSS_CURRENCY_WEBHOOK_URL
     }
 };
 //# sourceMappingURL=app.config.js.map

@@ -24,7 +24,7 @@
   },
   "contributors": [],
   "scripts": {
-    "dev": "tsx watch server.ts",
+    "dev": "tsx watch app/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "clean": "rm -rf dist",

@@ -17,8 +17,14 @@ RUN mkdir -p /app/wsdl-templates /app/wsdl
 
 COPY templates/SMS4ATM_UAT.wsdl /app/wsdl-templates/
 
-COPY .env. env.prod ./
+
+
+#COPY .env. env.prod ./
 
 EXPOSE 55099
 
-CMD ["node", "app/server.ts"]
+CMD ["npx", "tsx","app/server.ts"]
+
+#docker build --t api-cross-currency:v1.0.0 .
+#docker run -d --name api-cross-currency1 -p 55099:55099 api-cross-currency:v1.0.0
+

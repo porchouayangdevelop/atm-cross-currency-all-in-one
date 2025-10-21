@@ -7,6 +7,7 @@ import {getValidateFailedMessage} from "../utils/mapping";
 import {SendMessageService} from "./sendMessage.service";
 import {NotificationService} from "./notification.service";
 import transferRepo from "../repo/transfer.repo";
+import ValidateError from "../utils/validateError";
 
 
 const service = {
@@ -40,14 +41,10 @@ const service = {
 					let message: any;
 					const {ATMID, AccNum} = args;
 					if (!ATMID) {
-						return {
-							QueryAccNameResult: "12",
-						};
+						throw new ValidateError('Invalid ATM ID', 400);
 					}
 					if (!AccNum) {
-						return {
-							QueryAccNameResult: "12",
-						};
+						throw new ValidateError('Invalid AccNum', 400);
 					}
 					let account = extractAccount(AccNum);
 					let currency = extractCurrency(AccNum);

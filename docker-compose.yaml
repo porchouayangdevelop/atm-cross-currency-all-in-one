@@ -1,6 +1,6 @@
 services:
   atm-cross-currency-uat-node:
-    container_name: atm-cross-currency-uat-node
+#    container_name: atm-cross-currency-uat-node
     build:
       context: .
       dockerfile: Dockerfile

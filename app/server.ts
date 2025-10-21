@@ -3,11 +3,11 @@ import * as soap from "soap";
 // import * as xml2js from "xml2js";
 import fs from "fs";
 import path from "path";
-import {AppConfig} from "./app/configs/app.config";
+import {AppConfig} from "./configs/app.config";
 // import validateCode from "./app/utils/validate.currency";
-import queryAccNameService from "./app/services/acctname.service";
-import CimcusmControllerService from "./app/services/CimcusmController.service";
-import service from "./app/services/atm.service";
+import queryAccNameService from "./services/acctname.service";
+import CimcusmControllerService from "./services/CimcusmController.service";
+import service from "./services/atm.service";
 // import exchange_rateService from "./app/services/exchange_rate.service";
 // import transferRepo from "./app/repo/transfer.repo";
 // import {
