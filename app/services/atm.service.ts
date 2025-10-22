@@ -9,7 +9,6 @@ import {NotificationService} from "./notification.service";
 import transferRepo from "../repo/transfer.repo";
 import ValidateError from "../utils/validateError";
 
-import {v4} from 'uuid';
 const service = {
 	SMS4ATM_UAT: {
 		SMS4ATM_UATSoap: {
