@@ -12,7 +12,6 @@ export class NotificationService {
 	) {
 		const channel = process.env.NODE_ENV === 'production' ? 'atm-cross-currency-prd' :
 			'atm-cross-currency';
-		
 		await this.message.sendMessage(channel, AppConfig.slackConfig!.webhookUrl, message);
 		
 	}

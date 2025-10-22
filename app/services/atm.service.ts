@@ -9,7 +9,7 @@ import {NotificationService} from "./notification.service";
 import transferRepo from "../repo/transfer.repo";
 import ValidateError from "../utils/validateError";
 
-
+import {v4} from 'uuid';
 const service = {
 	SMS4ATM_UAT: {
 		SMS4ATM_UATSoap: {
@@ -55,7 +55,12 @@ const service = {
 					
 					switch (validateCode(currency.fromCurrency)) {
 						case true:
-							console.log("You're use deposit case");
+							const processRequest = {
+								ATMID: ATMID,
+								AccNum: AccNum,
+							}
+							
+							
 							const deposit: DepositItems | any = await depositRepo(ATMID, AccNum);
 							
 							if (deposit.currency_name === 'ACCOUNT_NOT_FOUND' && deposit.status == 'ERROR') {
@@ -71,6 +76,13 @@ const service = {
 										message: ${deposit.message},
 									}
 								}`
+								// const sessionID = v4();
+								// console.log(sessionID);
+								console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+								// console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
+								console.log(`Queue: ${deposit.currency_name}`)
+								console.log(`Result: ${getValidateFailedMessage('01')}`);
+								console.log('--'.repeat(20))
 								
 								// description = 'Not allowed cross currency'
 								await notificationService.sendMessageWithDeposit(message)
@@ -117,6 +129,15 @@ const service = {
 							const response: QueryAccNameResponse = {
 								QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : getValidateFailedMessage('76')
 							}
+							
+							// const sessionID = v4();
+							// console.log(sessionID);
+							console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+							console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
+							console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : getValidateFailedMessage('76')}`)
+							console.log(`Result: ${response.QueryAccNameResult}`);
+							console.log('--'.repeat(20))
+							
 							return {
 								QueryAccNameResult: response.QueryAccNameResult,
 							};
