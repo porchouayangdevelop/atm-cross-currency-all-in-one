@@ -1,6 +1,14 @@
 import {exchangeClient, interestClient} from "../client/exh_i.client";
 import {extractAccount, extractCurrency} from "../utils/extract.account";
-import validateCode from "../utils/validate.currency";
+import {
+	allowedAccountLength,
+	AllowedCCY,
+	isAllowedCurrency,
+	isDisallowedCurrency,
+	isValidAccountsMatch,
+	isValidateTargetAccountLength,
+	isValidSourceAccountLength,
+} from "../utils/validate.currency";
 import depositRepo from "../repo/deposit.repo";
 import {DepositItems, QueryAccNameResponse} from "../types/account.inq";
 import {getValidateFailedMessage} from "../utils/mapping";
@@ -33,7 +41,6 @@ const service = {
 					callback(null, {'Interest_RateResult': error.message});
 				}
 			},
-			
 			// @ts-ignore
 			QueryAccName: async function (args: any) {
 				try {
@@ -51,14 +58,24 @@ const service = {
 					const notificationService = new NotificationService(msgService);
 					// let description: string;
 					
+					if (isDisallowedCurrency(currency.fromCurrency)) {
+						return {
+							QueryAccNameResult: getValidateFailedMessage('10') + `, must be one of [${AllowedCCY}]`
+						}
+					}
 					
-					switch (validateCode(currency.fromCurrency)) {
+					switch (isAllowedCurrency(currency.fromCurrency)) {
 						case true:
 							const processRequest = {
 								ATMID: ATMID,
 								AccNum: AccNum,
 							}
 							
+							if (isValidateTargetAccountLength(currency.targetCurrency)) {
+								return {
+									QueryAccNameResult: getValidateFailedMessage('09') + `, must be one of [${AllowedCCY}]`
+								}
+							}
 							
 							const deposit: DepositItems | any = await depositRepo(ATMID, AccNum);
 							
@@ -75,15 +92,13 @@ const service = {
 										message: ${deposit.message},
 									}
 								}`
-								// const sessionID = v4();
-								// console.log(sessionID);
+								
 								console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
 								// console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
 								console.log(`Queue: ${deposit.currency_name}`)
 								console.log(`Result: ${getValidateFailedMessage('01')}`);
 								console.log('--'.repeat(20))
 								
-								// description = 'Not allowed cross currency'
 								await notificationService.sendMessageWithDeposit(message)
 								return getValidateFailedMessage('01');
 							}
@@ -105,32 +120,12 @@ const service = {
 								}
 							}`
 							
-							// description = "Successfully";
-							
 							await notificationService.sendMessageWithDeposit(message)
-							
-							// const backUp = new BackupRepo();
-							
-							// await backUp.backupQueryAccName({
-							// 	atm_id: ATMID,
-							// 	from_currency: deposit.from_ccy,
-							// 	to_currency: deposit.to_ccy,
-							// 	target_account: deposit.acct,
-							// 	target_account_name: deposit.name,
-							// 	result_message: description,
-							// 	target_currency: deposit.to_ccy,
-							// 	result_ccy: deposit.ccy,
-							// 	transaction_type: deposit.transaction_type,
-							// 	is_allowed: deposit.is_allowed
-							// })
-							
 							
 							const response: QueryAccNameResponse = {
 								QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : getValidateFailedMessage('76')
 							}
 							
-							// const sessionID = v4();
-							// console.log(sessionID);
 							console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
 							console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
 							console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : getValidateFailedMessage('76')}`)
@@ -142,6 +137,24 @@ const service = {
 							};
 						case false:
 							console.log("You're use transfer case");
+							if (isValidSourceAccountLength(account.fromAccount)) {
+								return {
+									QueryAccNameResult: getValidateFailedMessage('07') + `, must be one of [${allowedAccountLength}] digits length`
+								}
+							}
+							
+							if (isValidAccountsMatch(account.fromAccount, account.targetAccount)) {
+								return {
+									QueryAccNameResult: getValidateFailedMessage('08')
+								}
+							}
+							
+							if (isValidateTargetAccountLength(account.targetAccount)) {
+								return {
+									QueryAccNameResult: getValidateFailedMessage('09') + `, must be one of [${allowedAccountLength}] digits length`
+								}
+							}
+							
 							const transfer = await transferRepo(ATMID, AccNum);
 							if (transfer.is_allowed === 'blocked') {
 								return {

@@ -1,6 +1,6 @@
 import {PromisePool as CorePool} from "../configs/db.config";
 import ValidateError from "../utils/validateError";
-import validateCode from "../utils/validate.currency";
+import {isAllowedCurrency} from "../utils/validate.currency";
 import {extractCurrency} from "../utils/extract.account";
 // import type {DepositItems} from "../types/account.inq";
 // import { getValidateFailedMessage } from "../utils/mapping";
@@ -25,7 +25,7 @@ const depositRepo = async (
 		}
 		
 		const {fromCurrency, targetCurrency} = extractCurrency(AccNum);
-		if (validateCode(fromCurrency)) {
+		if (isAllowedCurrency(fromCurrency)) {
 			const [rows] = await connection.execute(
 				`CALL proc_deposit_cross_currency_inquiry(?,?)`,
 				[fromCurrency, targetCurrency]
