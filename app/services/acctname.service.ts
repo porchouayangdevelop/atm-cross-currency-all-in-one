@@ -1,6 +1,6 @@
 // import type { QueryAccNameRequest, QueryAccNameResponse } from "../types/account.inq";
 // import ValidateError from "../utils/validateError";
-import validateCode from "../utils/validate.currency";
+import {isAllowedCurrency} from "../utils/validate.currency";
 import depositRepo from "../repo/deposit.repo";
 // import transferRepo from "../repo/transfer.repo";
 // import validTellers from "../repo/teller.repo";
@@ -27,7 +27,7 @@ const queryAccNameService = {
 					let account = extractAccount(AccNum);
 					let currency = extractCurrency(AccNum);
 					
-					switch (validateCode(currency.fromCurrency)) {
+					switch (isAllowedCurrency(currency.fromCurrency)) {
 						case true:
 							console.log("You're use deposit case");
 							const deposit = await depositRepo(ATMID, AccNum);

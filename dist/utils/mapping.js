@@ -23,11 +23,16 @@ const validateFailedCode = [
 ];
 exports.validateFailedCode = validateFailedCode;
 const mapping = {
-    "01": "Invalid account number or account does not exist",
+    "01": "The targe account does not exists...",
     "02": "Account closed",
     "03": "Invalid merchant",
     "04": "Deposit not allowed ",
     "05": "Not audited,Frozen Account",
+    "06": "Incorrect numeric code of currency",
+    "07": "Account number length is invalid",
+    "08": "The targe account number same as from account number",
+    "09": "The target account is not allwowed length",
+    "10": "Invalid cross currency",
     "12": "Not Acctived Account, Account cancellation, invalid",
     "13": "Voucher loss",
     "14": "Invalid account number (no such number)",

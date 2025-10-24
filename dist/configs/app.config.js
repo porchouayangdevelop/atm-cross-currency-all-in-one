@@ -15,7 +15,7 @@ if (result.error) {
     throw result.error;
 }
 else {
-    console.log('Environment variable load successfully :', env);
+    console.log('Environment variable load successfully :', process.env.NODE_ENV, 'MODE');
 }
 const internalConfig = {
     host: process.env.S_DB_HOST,

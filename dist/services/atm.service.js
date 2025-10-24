@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const exh_i_client_1 = require("../client/exh_i.client");
 const extract_account_1 = require("../utils/extract.account");
-const validate_currency_1 = __importDefault(require("../utils/validate.currency"));
+const validate_currency_1 = require("../utils/validate.currency");
 const deposit_repo_1 = __importDefault(require("../repo/deposit.repo"));
 const mapping_1 = require("../utils/mapping");
 const sendMessage_service_1 = require("./sendMessage.service");
@@ -49,9 +49,22 @@ const service = {
                     let currency = (0, extract_account_1.extractCurrency)(AccNum);
                     const msgService = new sendMessage_service_1.SendMessageService();
                     const notificationService = new notification_service_1.NotificationService(msgService);
-                    switch ((0, validate_currency_1.default)(currency.fromCurrency)) {
+                    if ((0, validate_currency_1.isDisallowedCurrency)(currency.fromCurrency)) {
+                        return {
+                            QueryAccNameResult: (0, mapping_1.getValidateFailedMessage)('10') + `, must be one of [${validate_currency_1.AllowedCCY}]`
+                        };
+                    }
+                    switch ((0, validate_currency_1.isAllowedCurrency)(currency.fromCurrency)) {
                         case true:
-                            console.log("You're use deposit case");
+                            const processRequest = {
+                                ATMID: ATMID,
+                                AccNum: AccNum,
+                            };
+                            if ((0, validate_currency_1.isValidateTargetAccountLength)(currency.targetCurrency)) {
+                                return {
+                                    QueryAccNameResult: (0, mapping_1.getValidateFailedMessage)('09') + `, must be one of [${validate_currency_1.AllowedCCY}]`
+                                };
+                            }
                             const deposit = await (0, deposit_repo_1.default)(ATMID, AccNum);
                             if (deposit.currency_name === 'ACCOUNT_NOT_FOUND' && deposit.status == 'ERROR') {
                                 message = `processing QueryAccountName : {
@@ -66,6 +79,10 @@ const service = {
 										message: ${deposit.message},
 									}
 								}`;
+                                console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+                                console.log(`Queue: ${deposit.currency_name}`);
+                                console.log(`Result: ${(0, mapping_1.getValidateFailedMessage)('01')}`);
+                                console.log('--'.repeat(20));
                                 await notificationService.sendMessageWithDeposit(message);
                                 return (0, mapping_1.getValidateFailedMessage)('01');
                             }
@@ -88,11 +105,31 @@ const service = {
                             const response = {
                                 QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : (0, mapping_1.getValidateFailedMessage)('76')
                             };
+                            console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+                            console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
+                            console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : (0, mapping_1.getValidateFailedMessage)('76')}`);
+                            console.log(`Result: ${response.QueryAccNameResult}`);
+                            console.log('--'.repeat(20));
                             return {
                                 QueryAccNameResult: response.QueryAccNameResult,
                             };
                         case false:
                             console.log("You're use transfer case");
+                            if ((0, validate_currency_1.isValidSourceAccountLength)(account.fromAccount)) {
+                                return {
+                                    QueryAccNameResult: (0, mapping_1.getValidateFailedMessage)('07') + `, must be one of [${validate_currency_1.allowedAccountLength}] digits length`
+                                };
+                            }
+                            if ((0, validate_currency_1.isValidAccountsMatch)(account.fromAccount, account.targetAccount)) {
+                                return {
+                                    QueryAccNameResult: (0, mapping_1.getValidateFailedMessage)('08')
+                                };
+                            }
+                            if ((0, validate_currency_1.isValidateTargetAccountLength)(account.targetAccount)) {
+                                return {
+                                    QueryAccNameResult: (0, mapping_1.getValidateFailedMessage)('09') + `, must be one of [${validate_currency_1.allowedAccountLength}] digits length`
+                                };
+                            }
                             const transfer = await (0, transfer_repo_1.default)(ATMID, AccNum);
                             if (transfer.is_allowed === 'blocked') {
                                 return {
