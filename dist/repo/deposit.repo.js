@@ -24,6 +24,9 @@ const depositRepo = async (ATMID, AccNum) => {
         const { fromCurrency, targetCurrency } = (0, extract_account_1.extractCurrency)(AccNum);
         if ((0, validate_currency_1.isAllowedCurrency)(fromCurrency)) {
             const [rows] = await connection.execute(`CALL proc_deposit_cross_currency_inquiry(?,?)`, [fromCurrency, targetCurrency]);
+            if (!rows || rows.length === 0) {
+                throw new validateError_1.default("Not found", 401);
+            }
             return rows[0];
         }
         else {

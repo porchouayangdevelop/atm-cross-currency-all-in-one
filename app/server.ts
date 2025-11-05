@@ -119,6 +119,8 @@ const startServer = async () => {
 		
 		// await getUpiCard('000040003451', 'D');
 		
+		// const isValid =	await validateStatusRepostiry('01000100000194');
+		// console.log(isValid)
 		// await exchangeClient();
 		// await interestClient();
 	} catch (error) {

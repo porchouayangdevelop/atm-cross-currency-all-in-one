@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFaildedCode = exports.getValidateFailedMessage = exports.validateFailedCode = void 0;
-const validateFailedCode = [
+exports.getValidateAccountMapping = exports.getValidateFailedMessage = exports.getFaildedCode = exports.validateFailedCode = void 0;
+exports.validateFailedCode = [
     "01",
     "02",
     "03",
@@ -21,7 +21,6 @@ const validateFailedCode = [
     "91",
     "96",
 ];
-exports.validateFailedCode = validateFailedCode;
 const mapping = {
     "01": "The targe account does not exists...",
     "02": "Account closed",
@@ -33,7 +32,7 @@ const mapping = {
     "08": "The targe account number same as from account number",
     "09": "The target account is not allwowed length",
     "10": "Invalid cross currency",
-    "12": "Not Acctived Account, Account cancellation, invalid",
+    "12": "Not Actived Account, Account cancellation, invalid",
     "13": "Voucher loss",
     "14": "Invalid account number (no such number)",
     "15": "No such issuer",
@@ -46,12 +45,42 @@ const mapping = {
     "91": "BLOCK ACCOUNT (authority,bank)",
     "96": "Password loss",
 };
-const getFaildedCode = (code) => {
-    return validateFailedCode.includes(code);
+const mappingAccountStatus = {
+    "1": "Not audited (no payment but no payment)",
+    "2": "not activated",
+    "3": "long time hanging",
+    "5": "Password loss",
+    "6": "Password lock",
+    "7": "Voucher port",
+    "8": "Report loss",
+    "9": "BLOCK NO DEBIT",
+    "10": "Account cancellation (only paid but not received)",
+    "12": "BLOCK NO CREDIT",
+    "13": "To be inspected annually",
+    "14": "Unannual inspection (no payment but no payment)",
+    "16": "BLOCK ACCOUNT (the bank)",
+    "17": "BLOCK ACCOUNT(authority)",
+    "25": "AMOUNT BLOCKED",
+    "42": "Interbank Agreement",
+    "43": "Unit Agreement",
+    "44": "Unit Smart Communication",
+    "46": "Industry regular",
+    "47": "Public account",
+    "49": "Group account? ?",
+    "59": "Off-site account opening? ? DDZUOPAC(DEVWFH)",
+    "63": "Electronic account? ? DDZUOPAC(DEVWFH)",
+    "70": "Characteristic interest rate ",
+    "71": "FROZEN ACCOUNT(Can't do anything )",
+    "94": "Transfer from permanent household to permanent household (0115202)",
+    "95": "Exemption from immovable account fee (0115202)",
+    "96": "Set up a fixed account online (0115202)",
+    "4": "Dormant Account ",
+    "00": "All normal"
 };
+const getFaildedCode = (code) => exports.validateFailedCode.includes(code);
 exports.getFaildedCode = getFaildedCode;
-const getValidateFailedMessage = (code) => {
-    return mapping[code] || "Validate failed";
-};
+const getValidateFailedMessage = (code) => mapping[code] || "Validate failed";
 exports.getValidateFailedMessage = getValidateFailedMessage;
+const getValidateAccountMapping = (source) => mappingAccountStatus[source];
+exports.getValidateAccountMapping = getValidateAccountMapping;
 //# sourceMappingURL=mapping.js.map

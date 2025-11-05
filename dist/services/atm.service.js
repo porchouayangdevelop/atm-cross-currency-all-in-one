@@ -12,6 +12,7 @@ const sendMessage_service_1 = require("./sendMessage.service");
 const notification_service_1 = require("./notification.service");
 const transfer_repo_1 = __importDefault(require("../repo/transfer.repo"));
 const validateError_1 = __importDefault(require("../utils/validateError"));
+const status_repo_1 = require("../repo/status.repo");
 const service = {
     SMS4ATM_UAT: {
         SMS4ATM_UATSoap: {
@@ -86,6 +87,20 @@ const service = {
                                 await notificationService.sendMessageWithDeposit(message);
                                 return (0, mapping_1.getValidateFailedMessage)('01');
                             }
+                            const isValidStatus = await (0, status_repo_1.validateStatusRepostiry)(currency.targetCurrency);
+                            if (isValidStatus != '00') {
+                                return {
+                                    QueryAccNameResult: `The targe account or currency status ${(0, mapping_1.getValidateAccountMapping)(isValidStatus)}, can not do transaction`
+                                };
+                            }
+                            const response = {
+                                QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : (0, mapping_1.getValidateFailedMessage)('76')
+                            };
+                            console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+                            console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
+                            console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : (0, mapping_1.getValidateFailedMessage)('76')}`);
+                            console.log(`Result: ${response.QueryAccNameResult}`);
+                            console.log('--'.repeat(20));
                             message = `processing QueryAccountName : {
 								processRequest: ${JSON.stringify(args)},
 								result: {
@@ -102,14 +117,6 @@ const service = {
 								}
 							}`;
                             await notificationService.sendMessageWithDeposit(message);
-                            const response = {
-                                QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : (0, mapping_1.getValidateFailedMessage)('76')
-                            };
-                            console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
-                            console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
-                            console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : (0, mapping_1.getValidateFailedMessage)('76')}`);
-                            console.log(`Result: ${response.QueryAccNameResult}`);
-                            console.log('--'.repeat(20));
                             return {
                                 QueryAccNameResult: response.QueryAccNameResult,
                             };

@@ -1,4 +1,4 @@
-const validateFailedCode: string[] = [
+export const validateFailedCode: string[] = [
 	"01",
 	"02",
 	"03",
@@ -30,7 +30,7 @@ const mapping: Record<string, string> = {
 	"08": "The targe account number same as from account number",
 	"09": "The target account is not allwowed length",
 	"10": "Invalid cross currency",
-	"12": "Not Acctived Account, Account cancellation, invalid",
+	"12": "Not Actived Account, Account cancellation, invalid",
 	"13": "Voucher loss",
 	"14": "Invalid account number (no such number)",
 	"15": "No such issuer",
@@ -44,12 +44,45 @@ const mapping: Record<string, string> = {
 	"96": "Password loss",
 };
 
-const getFaildedCode = (code: string) => {
-	return validateFailedCode.includes(code);
+
+const mappingAccountStatus: Record<string, string> = {
+	"1": "Not audited (no payment but no payment)",
+	"2": "not activated",
+	"3": "long time hanging",
+	"5": "Password loss",
+	"6": "Password lock",
+	"7": "Voucher port",
+	"8": "Report loss",
+	"9": "BLOCK NO DEBIT",
+	"10": "Account cancellation (only paid but not received)",
+	"12": "BLOCK NO CREDIT",
+	"13": "To be inspected annually",
+	"14": "Unannual inspection (no payment but no payment)",
+	"16": "BLOCK ACCOUNT (the bank)",
+	"17": "BLOCK ACCOUNT(authority)",
+	"25": "AMOUNT BLOCKED",
+	"42": "Interbank Agreement",
+	"43": "Unit Agreement",
+	"44": "Unit Smart Communication",
+	"46": "Industry regular",
+	"47": "Public account",
+	"49": "Group account? ?",
+	"59": "Off-site account opening? ? DDZUOPAC(DEVWFH)",
+	"63": "Electronic account? ? DDZUOPAC(DEVWFH)",
+	"70": "Characteristic interest rate ",
+	"71": "FROZEN ACCOUNT(Can't do anything )",
+	"94": "Transfer from permanent household to permanent household (0115202)",
+	"95": "Exemption from immovable account fee (0115202)",
+	"96": "Set up a fixed account online (0115202)",
+	"4": "Dormant Account ",
+	"00": "All normal"
 }
 
-const getValidateFailedMessage = (code: string) => {
-	return mapping[code] || "Validate failed";
-};
 
-export {validateFailedCode, getValidateFailedMessage, getFaildedCode};
+export const getFaildedCode = (code: string) => validateFailedCode.includes(code);
+
+
+export const getValidateFailedMessage = (code: string) => mapping[code] || "Validate failed";
+
+
+export const getValidateAccountMapping = (source: string) => mappingAccountStatus[source]

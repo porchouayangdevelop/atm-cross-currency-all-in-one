@@ -11,11 +11,12 @@ import {
 } from "../utils/validate.currency";
 import depositRepo from "../repo/deposit.repo";
 import {DepositItems, QueryAccNameResponse} from "../types/account.inq";
-import {getValidateFailedMessage} from "../utils/mapping";
+import {getValidateAccountMapping, getValidateFailedMessage} from "../utils/mapping";
 import {SendMessageService} from "./sendMessage.service";
 import {NotificationService} from "./notification.service";
 import transferRepo from "../repo/transfer.repo";
 import ValidateError from "../utils/validateError";
+import {validateStatusRepostiry} from "../repo/status.repo";
 
 const service = {
 	SMS4ATM_UAT: {
@@ -77,6 +78,7 @@ const service = {
 								}
 							}
 							
+							
 							const deposit: DepositItems | any = await depositRepo(ATMID, AccNum);
 							
 							if (deposit.currency_name === 'ACCOUNT_NOT_FOUND' && deposit.status == 'ERROR') {
@@ -103,6 +105,28 @@ const service = {
 								return getValidateFailedMessage('01');
 							}
 							
+							
+							const isValidStatus = await validateStatusRepostiry(currency.targetCurrency);
+							
+							
+							if (isValidStatus != '00') {
+								return {
+									QueryAccNameResult: `The targe account or currency status ${getValidateAccountMapping(isValidStatus)}, can not do transaction`
+								}
+							}
+							
+							
+							const response: QueryAccNameResponse = {
+								QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : getValidateFailedMessage('76')
+							}
+							
+							console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
+							console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
+							console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : getValidateFailedMessage('76')}`)
+							console.log(`Result: ${response.QueryAccNameResult}`);
+							console.log('--'.repeat(20))
+							
+							
 							// sent o notification
 							message = `processing QueryAccountName : {
 								processRequest: ${JSON.stringify(args)},
@@ -119,22 +143,10 @@ const service = {
 									timestamp: ${new Date().toISOString()},
 								}
 							}`
-							
 							await notificationService.sendMessageWithDeposit(message)
-							
-							const response: QueryAccNameResponse = {
-								QueryAccNameResult: deposit.is_allowed == '1' ? deposit.name : getValidateFailedMessage('76')
-							}
-							
-							console.log(`You're use deposit case. processRequest : ${JSON.stringify(processRequest)} `);
-							console.log(`From currency ${deposit.from_ccy} target to ${deposit.to_ccy}`);
-							console.log(`Queue: ${deposit.is_allowed == '1' ? 'Allowed' : getValidateFailedMessage('76')}`)
-							console.log(`Result: ${response.QueryAccNameResult}`);
-							console.log('--'.repeat(20))
-							
 							return {
 								QueryAccNameResult: response.QueryAccNameResult,
-							};
+							}
 						case false:
 							console.log("You're use transfer case");
 							if (isValidSourceAccountLength(account.fromAccount)) {

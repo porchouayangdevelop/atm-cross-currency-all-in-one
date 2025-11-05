@@ -31,6 +31,10 @@ const depositRepo = async (
 				[fromCurrency, targetCurrency]
 			);
 			
+			if (!rows || rows.length === 0) {
+				throw new ValidateError("Not found", 401);
+			}
+			
 			return rows[0]
 			
 			// const mapResult = rows.map((item: DepositItems) => {
