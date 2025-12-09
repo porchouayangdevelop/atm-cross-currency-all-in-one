@@ -78,7 +78,6 @@ const service = {
 								}
 							}
 							
-							
 							const deposit: DepositItems | any = await depositRepo(ATMID, AccNum);
 							
 							if (deposit.currency_name === 'ACCOUNT_NOT_FOUND' && deposit.status == 'ERROR') {

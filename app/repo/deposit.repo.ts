@@ -39,7 +39,7 @@ const depositRepo = async (
 			
 			// const mapResult = rows.map((item: DepositItems) => {
 			// 	return {
-			// 		// ...item,
+			// ...item,
 			// 		fromCurrency: item.from_ccy,
 			// 		targetCurrency: item.to_ccy,
 			// 		targetAccount: item.acct,
