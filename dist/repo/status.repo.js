@@ -1,19 +1,21 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateStatusRepostiry = void 0;
 const db_config_1 = require("../configs/db.config");
 const validateError_1 = __importDefault(require("../utils/validateError"));
 const validateStatusRepostiry = async (resource) => {
-    if (typeof resource !== 'string' || !resource || resource === undefined) {
-        throw new validateError_1.default('the account invalid', 400);
-    }
-    let con = await db_config_1.PromisePool.getConnection();
-    try {
-        console.log(`Validate process...`);
-        const [rows] = await con.execute(`select CASE
+  if (typeof resource !== "string" || !resource || resource === undefined) {
+    throw new validateError_1.default("the account invalid", 400);
+  }
+  let con = await db_config_1.PromisePool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      `select CASE
                                                  WHEN substring(AC_STS_WORD, 1, 1) = '1' THEN '1' -- Not audited
                                                  WHEN substring(AC_STS_WORD, 2, 1) = '1' THEN '2' -- Not activated
                                                  WHEN substring(AC_STS_WORD, 3, 1) = '1' THEN '3' -- Long time hanging
@@ -65,18 +67,18 @@ const validateStatusRepostiry = async (resource) => {
                                                  END AS \`responseStaus\`
                                       from ddtmst
                                       where AC_STS = 'N'
-                                        and AC = ?;`, [resource]);
-        if (!rows || rows.length === 0) {
-            throw new validateError_1.default('Not found', 401);
-        }
-        return rows.responseStaus;
+                                        and AC = ?;`,
+      [resource]
+    );
+    if (!rows || rows.length === 0) {
+      throw new validateError_1.default("Not found", 401);
     }
-    catch (error) {
-        throw error.message;
-    }
-    finally {
-        await con.release();
-    }
+    return rows.responseStaus;
+  } catch (error) {
+    throw error.message;
+  } finally {
+    await con.release();
+  }
 };
 exports.validateStatusRepostiry = validateStatusRepostiry;
 //# sourceMappingURL=status.repo.js.map
